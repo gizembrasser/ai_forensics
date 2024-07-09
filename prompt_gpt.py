@@ -20,7 +20,7 @@ def get_gpt_response(prompt):
     
     for model in models:
         response = openai.ChatCompletion.create(
-            model=model,  # Specify the GPT model
+            model=model,  # Specify the model
             messages=[{"role": "user", "content": prompt}],
             max_tokens=1024,
             temperature=0.7

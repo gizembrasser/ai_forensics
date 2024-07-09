@@ -16,7 +16,7 @@ def test_llms(llms, prompt):
 # Define the LLMs to test
 llms = {
     'OpenAI': get_gpt_response,
-    # 'Google Gemini': get_gemini_response,
+    'Google Gemini': get_gemini_response,
 }
 
 # Define a prompt
