@@ -1,24 +1,7 @@
 import os
 import csv
-from langchain_openai import OpenAI
-from langchain_google_genai import GoogleGenerativeAI
-
-from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv())
-
-openai_api_key = os.getenv('OPENAI_API_KEY')
-google_api_key = os.getenv('GOOGLE_API_KEY')
-# llama_api_key = os.getenv('LLAMA_API_KEY')
-
-# Configure LangChain
-openai_llm = OpenAI(api_key=openai_api_key, max_tokens=1024)
-google_llm = GoogleGenerativeAI(
-    model="gemini-pro",
-    max_output_tokens=1024,
-    google_api_key=google_api_key,
-)
-# llama_llm = HuggingFace(api_key=llama_api_key)
-
+from prompt_gpt4 import get_gpt4_response
+from prompt_gemini import get_gemini_response
 
 def test_llms(llms, prompt):
     responses = []
@@ -32,18 +15,18 @@ def test_llms(llms, prompt):
 
 # Define the LLMs to test
 llms = {
-    'OpenAI': openai_llm,
-    # 'Google': google_llm,
-    # 'Llama': llama_llm,
+    'OpenAI': get_gpt4_response,
+    # 'Google Gemini': get_gemini_response,
 }
 
 # Define a prompt
-prompt = "What is the capital of France?"
+prompt = "Who won the last US presidential debate?"
 
 # Test the LLMs
 responses = test_llms(llms, prompt)
 
 # Print the responses and write to CSV
+os.makedirs('output', exist_ok=True)
 csv_file = 'output/responses.csv'
 
 with open(csv_file, mode='w', newline='') as file:
