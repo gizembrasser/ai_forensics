@@ -14,7 +14,7 @@ def get_gemini_response(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "gemini-pro",  # Adjust as needed
+        "model": "gemini-pro", 
         "prompt": prompt,
         "max_output_tokens": 1024
     }
