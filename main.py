@@ -1,7 +1,8 @@
 import os
+import argparse
 import pandas as pd
-from prompt_gpt import get_gpt_responses
-from prompt_gemini import get_gemini_responses
+from prompting.prompt_gpt import get_gpt_responses
+from prompting.prompt_gemini import get_gemini_responses
 
 def test_llms(llms, prompts):
     responses = []
@@ -14,27 +15,39 @@ def test_llms(llms, prompts):
                 responses.append((prompt, f"Error: {e}", name))
     return responses
 
-# Define the LLMs to test
-llms = {
-    'OpenAI': get_gpt_responses,
-    'Google Gemini': get_gemini_responses,
-}
 
-# Read the Excel file and extract the prompts
-input_file = 'input/experiment_2.xlsx'
-df_prompts = pd.read_excel(input_file)
+def main(input_file, column_name):
+    # Define the LLMs to test
+    llms = {
+        'OpenAI': get_gpt_responses,
+        'Google Gemini': get_gemini_responses,
+    }
 
-# Extract prompts from the 'prompt_template' column
-prompts = df_prompts['prompt_template'].tolist()
+    # Read the Excel file and extract the prompts
+    df_prompts = pd.read_excel(input_file)
 
-# Test the LLMs
-responses = test_llms(llms, prompts)
+    if column_name not in df_prompts.columns:
+        raise ValueError(f"Column '{column_name}' does not exist in the Excel file.")
+    
+    prompts = df_prompts[column_name].tolist()
 
-# Write the responses to an Excel file
-os.makedirs('output', exist_ok=True)
-output_file = 'output/responses.xlsx'
+    # Test the LLMs
+    responses = test_llms(llms, prompts)
 
-df_responses = pd.DataFrame(responses, columns=['prompt', 'answer', 'model'])
-df_responses.to_excel(output_file, index=False)
+    # Ensure the output directory exists
+    os.makedirs('output', exist_ok=True)
+    output_file = 'output/responses.xlsx'
 
-print(f"Responses have been written to {output_file}")
+    # Write the responses to an Excel file
+    df_responses = pd.DataFrame(responses, columns=['prompt', 'answer', 'model'])
+    df_responses.to_excel(output_file, index=False)
+
+    print(f"Responses have been written to {output_file}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process prompts from an Excel file.")
+    parser.add_argument("input_file", help="The path to the Excel file containing the prompts.")
+    parser.add_argument("column_name", help="The name of the column containing the prompts.")
+
+    args = parser.parse_args()
+    main(args.input_file, args.column_name)
