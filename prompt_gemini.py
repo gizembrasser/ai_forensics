@@ -13,17 +13,18 @@ models = [
     "gemini-1.5-flash", "gemini-1.0-pro", 
 ]
 
-def get_gemini_response(prompt):
-    responses = []
+def get_gemini_responses(prompts):
+    all_responses = []
 
-    for model in models:
-        gemini_llm = GoogleGenerativeAI(
-            model=model, # Specify the model
-            max_output_tokens=1024,
-            google_api_key=gemini_api_key,
-        )
+    for prompt in prompts:
+        for model in models:
+            gemini_llm = GoogleGenerativeAI(
+                model=model, # Specify the model
+                max_output_tokens=1024,
+                google_api_key=gemini_api_key,
+            )
 
-        response = gemini_llm(prompt)
-        responses.append((prompt, response, model))
+            response = gemini_llm(prompt)
+            all_responses.append((prompt, response, model))
     
-    return responses
+    return all_responses

@@ -15,17 +15,17 @@ models = [
     "gpt-3.5-turbo-0125", "gpt-3.5-turbo-1106"
 ]
 
-def get_gpt_response(prompt):
-    responses = []
+def get_gpt_responses(prompts):
+    all_responses = []
     
-    for model in models:
-        response = openai.ChatCompletion.create(
-            model=model,  # Specify the model
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=1024,
-            temperature=0.7
-        )
-        responses.append((prompt, response.choices[0].message["content"].strip(), model))
+    for prompt in prompts:
+        for model in models:
+            response = openai.ChatCompletion.create(
+                model=model,  # Specify the model
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=1024,
+                temperature=0.7
+            )
+            all_responses.append((prompt, response.choices[0].message["content"].strip(), model))
     
-    return responses
-
+    return all_responses
