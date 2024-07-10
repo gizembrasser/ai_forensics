@@ -1,3 +1,7 @@
+# Prompting LLM API's
+
+## ChatGPT and Gemini models
+
 1. Put your Excel file containing prompts in the `input` folder. Remember the name of the column containing your prompts.
 
 2. In the textfiles in the `input` folder you can specify which models for each LLM you want to prompt. Separate the name of each model by a comma. Example for the Gemini models:
@@ -17,3 +21,7 @@ python main.py input/<excel_file.xlsx> <column_name>
 ```
 python main.py input/<excel_file.xlsx> <column_name> --num_rows 10
 ```
+
+## Llama models
+
+The Ollama LLM script in `prompt_ollama.ipynb` has to be run from Google Colab. Upload the Excel file containing the prompts to the notebook on Colab and execute all the codecells.
