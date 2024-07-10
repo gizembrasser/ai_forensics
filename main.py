@@ -1,23 +1,40 @@
 import os
 import argparse
 import pandas as pd
+import concurrent.futures
+import time
 from prompting.prompt_gpt import get_gpt_responses
 from prompting.prompt_gemini import get_gemini_responses
-from prompting.prompt_llama import get_llama_responses
+# from prompting.prompt_llama import get_llama_responses
 
-def test_llms(llms, prompts):
+
+def test_llms_parallel(llms, prompts):
     responses = []
-    for name, llm in llms.items():
+
+    def collect_responses(name, llm_func):
         try:
-            response_list = llm(prompts)
-            responses.extend(response_list)  # Extend the list with the responses from each model
+            response_list = llm_func(prompts)
+            return response_list
         except Exception as e:
-            for prompt in prompts:
-                responses.append((prompt, f"Error: {e}", name))
+            return [(prompt, f"Error: {e}", name) for prompt in prompts]
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_to_llm = {executor.submit(collect_responses, name, llm): name for name, llm in llms.items()}
+        
+        for future in concurrent.futures.as_completed(future_to_llm):
+            name = future_to_llm[future]
+            try:
+                result = future.result()
+                responses.extend(result)
+            except Exception as e:
+                print(f"{name} generated an exception: {e}")
+
     return responses
 
 
 def main(input_file, column_name, num_rows=None):
+    start_time = time.time()
+
     # Define the LLMs to test
     llms = {
         'OpenAI': get_gpt_responses,
@@ -38,17 +55,21 @@ def main(input_file, column_name, num_rows=None):
     prompts = df_prompts[column_name].tolist()
 
     # Test the LLMs
-    responses = test_llms(llms, prompts)
+    responses = test_llms_parallel(llms, prompts)
 
     # Ensure the output directory exists
     os.makedirs('output', exist_ok=True)
-    output_file = 'output/responses.xlsx'
+    output_file = 'output/responses1.xlsx'
 
     # Write the responses to an Excel file
     df_responses = pd.DataFrame(responses, columns=['prompt', 'answer', 'model'])
     df_responses.to_excel(output_file, index=False)
 
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
     print(f"Responses have been written to {output_file}")
+    print(f"Time taken: {elapsed_time:.2f} seconds")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process prompts from an Excel file.")
