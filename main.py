@@ -3,6 +3,7 @@ import argparse
 import pandas as pd
 from prompting.prompt_gpt import get_gpt_responses
 from prompting.prompt_gemini import get_gemini_responses
+from prompting.prompt_llama import get_llama_responses
 
 def test_llms(llms, prompts):
     responses = []
@@ -16,11 +17,12 @@ def test_llms(llms, prompts):
     return responses
 
 
-def main(input_file, column_name):
+def main(input_file, column_name, num_rows=None):
     # Define the LLMs to test
     llms = {
         'OpenAI': get_gpt_responses,
         'Google Gemini': get_gemini_responses,
+        'Llama': get_llama_responses
     }
 
     # Read the Excel file and extract the prompts
@@ -29,6 +31,10 @@ def main(input_file, column_name):
     if column_name not in df_prompts.columns:
         raise ValueError(f"Column '{column_name}' does not exist in the Excel file.")
     
+    # If num_rows is specified, use only that many rows
+    if num_rows is not None:
+        df_prompts = df_prompts.head(num_rows)
+
     prompts = df_prompts[column_name].tolist()
 
     # Test the LLMs
@@ -48,6 +54,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process prompts from an Excel file.")
     parser.add_argument("input_file", help="The path to the Excel file containing the prompts.")
     parser.add_argument("column_name", help="The name of the column containing the prompts.")
+    parser.add_argument("--num_rows", type=int, help="The number of rows to process from the input file.")
 
     args = parser.parse_args()
-    main(args.input_file, args.column_name)
+    main(args.input_file, args.column_name, args.num_rows)
