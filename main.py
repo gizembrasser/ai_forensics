@@ -59,7 +59,7 @@ def main(input_file, column_name, num_rows=None):
 
     # Ensure the output directory exists
     os.makedirs('output', exist_ok=True)
-    output_file = 'output/responses1.xlsx'
+    output_file = 'output/responses.xlsx'
 
     # Write the responses to an Excel file
     df_responses = pd.DataFrame(responses, columns=['prompt', 'answer', 'model'])
