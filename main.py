@@ -5,7 +5,6 @@ import concurrent.futures
 import time
 from prompting.prompt_gpt import get_gpt_responses
 from prompting.prompt_gemini import get_gemini_responses
-# from prompting.prompt_llama import get_llama_responses
 
 
 def test_llms_parallel(llms, prompts):
@@ -39,7 +38,6 @@ def main(input_file, column_name, num_rows=None):
     llms = {
         'OpenAI': get_gpt_responses,
         'Google Gemini': get_gemini_responses,
-        # 'Llama': get_llama_responses
     }
 
     # Read the Excel file and extract the prompts
