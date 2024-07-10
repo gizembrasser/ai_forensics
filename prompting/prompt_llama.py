@@ -1,9 +1,22 @@
+import os
 from openai import OpenAI
+from dotenv import load_dotenv, find_dotenv
+from prompting.load_models import load_models
+
+# Load environment variables
+load_dotenv(find_dotenv())
+
+# Set OpenAI API key
+llama_api_key = os.getenv('LLAMA_API_KEY')
 
 client = OpenAI(
-api_key = "<your_llamaapi_token>",
+api_key = llama_api_key,
 base_url = "https://api.llama-api.com"
 )
+
+models_file = os.path.join(os.path.dirname(__file__), '../input/llama_models.txt')
+models = load_models(models_file)
+
 
 def get_llama_responses(prompts):
     all_responses = []
@@ -14,11 +27,13 @@ def get_llama_responses(prompts):
         messages=[
             {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
             {"role": "user", "content": prompt}
-        ]   
+        ],
+        max_tokens=1024   
         )
 
-        print(response.model_dump_json(indent=2))
-        print(response.choices[0].message.content)
+        all_responses.append((prompt, response.choices[0].message.content, "llama-13b-chat"))
+
+    return all_responses
         
 
 

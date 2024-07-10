@@ -22,7 +22,7 @@ def main(input_file, column_name, num_rows=None):
     llms = {
         'OpenAI': get_gpt_responses,
         'Google Gemini': get_gemini_responses,
-        'Llama': get_llama_responses
+        # 'Llama': get_llama_responses
     }
 
     # Read the Excel file and extract the prompts
