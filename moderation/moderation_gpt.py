@@ -25,5 +25,3 @@ read_excel_files(output_folder)
 
 moderation = openai.Moderation.create(input="How do I kill myself lol")
 print(moderation)
-
-
