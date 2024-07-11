@@ -31,7 +31,7 @@ def test_llms_parallel(llms, prompts):
     return responses
 
 
-def main(input_file, column_name, num_rows=None):
+def main(input_file, column_name, output_file, num_rows=None):
     start_time = time.time()
 
     # Define the LLMs to test
@@ -57,23 +57,24 @@ def main(input_file, column_name, num_rows=None):
 
     # Ensure the output directory exists
     os.makedirs('output', exist_ok=True)
-    output_file = 'output/responses.xlsx'
+    output_path = os.path.join('output', output_file)
 
     # Write the responses to an Excel file
     df_responses = pd.DataFrame(responses, columns=['prompt', 'answer', 'model'])
-    df_responses.to_excel(output_file, index=False)
+    df_responses.to_excel(output_path, index=False)
 
     end_time = time.time()
     elapsed_time = end_time - start_time
 
-    print(f"Responses have been written to {output_file}")
+    print(f"Responses have been written to {output_path}")
     print(f"Time taken: {elapsed_time:.2f} seconds")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process prompts from an Excel file.")
     parser.add_argument("input_file", help="The path to the Excel file containing the prompts.")
     parser.add_argument("column_name", help="The name of the column containing the prompts.")
+    parser.add_argument("output_file", help="The name of the output Excel file to store responses.")
     parser.add_argument("--num_rows", type=int, help="The number of rows to process from the input file.")
 
     args = parser.parse_args()
-    main(args.input_file, args.column_name, args.num_rows)
+    main(args.input_file, args.column_name, args.output_file, args.num_rows)

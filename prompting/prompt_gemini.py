@@ -11,7 +11,7 @@ load_dotenv(find_dotenv())
 gemini_api_key = os.getenv('GOOGLE_API_KEY')
 
 # Path to the models file
-models_file = os.path.join(os.path.dirname(__file__), '../input/gemini_models.txt')
+models_file = os.path.join(os.path.dirname(__file__), '../input/models/gemini_models.txt')
 models = load_models(models_file)
 
 

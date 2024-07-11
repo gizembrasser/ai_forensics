@@ -11,7 +11,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = openai_api_key
 
 # Path to the models file
-models_file = os.path.join(os.path.dirname(__file__), '../input/gpt_models.txt')
+models_file = os.path.join(os.path.dirname(__file__), '../input/models/gpt_models.txt')
 models = load_models(models_file)
 
 
