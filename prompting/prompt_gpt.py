@@ -1,7 +1,7 @@
 import os
 import openai
 from dotenv import load_dotenv, find_dotenv
-from prompting.load_models import load_models
+from utils.load_models import load_models
 
 # Load environment variables
 load_dotenv(find_dotenv())

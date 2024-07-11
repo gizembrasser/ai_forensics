@@ -2,7 +2,7 @@ import os
 import time
 from dotenv import load_dotenv, find_dotenv
 from langchain_google_genai import GoogleGenerativeAI
-from prompting.load_models import load_models
+from utils.load_models import load_models
 
 # Load environment variables
 load_dotenv(find_dotenv())
