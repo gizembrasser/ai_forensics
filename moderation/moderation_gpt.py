@@ -6,7 +6,7 @@ def test_moderation(prompts):
 
     for prompt in prompts:
         moderation = openai.Moderation.create(input=prompt)
-        result = moderation["results"][0]["categories"]
+        result = moderation["results"][0]["flagged"]
         all_results.append((prompt, result))
     
     return all_results
