@@ -19,7 +19,9 @@ def clean_gpt_dataset(file, model_filter='gpt', column_to_clean='answer'):
                                                                 .str.replace('  +', ' ', regex=True)
 
     # Save the cleaned DataFrame to the output file
-    cleaned_file = os.path.join(os.path.dirname(__file__), '../output/cleaned/US_responses_gpt.xlsx')  
+    filename = input("Enter the name for the cleaned GPT Excel file (without extension): ") + ".xlsx"
+
+    cleaned_file = os.path.join(os.path.dirname(__file__), f'../../output/cleaned/{filename}')
     df_filtered.to_excel(cleaned_file, index=False)
 
 
@@ -56,14 +58,17 @@ def clean_training_dataset(file, language='en', column_to_clean='answer'):
     df_filtered = df_filtered[df_filtered['macrocategory'] != 'unlabelled']
 
     # Clean the specified column
-    df_filtered[column_to_clean] = df_filtered[column_to_clean].str.replace("Hello, this is Bing. ", "", regex=False)\
+    df_filtered[column_to_clean] = df_filtered[column_to_clean].str.replace("Hello, this is Bing.", "", regex=False)\
                                                                 .str.replace('<br>', ' ', regex=False)\
                                                                 .apply(remove_emojis)\
-                                                                .str.replace(r'\[.*?\]', '', regex=True)\
-                                                                .str.replace('\n', ' ', regex=True)                                                            
+                                                                .str.replace(r'\s*\[.*?\]', '', regex=True)\
+                                                                .str.replace('\n', ' ', regex=True)\
+                                                                .str.strip()                                                            
 
     # Save the cleaned DataFrame to the output file
-    cleaned_file = os.path.join(os.path.dirname(__file__), '../../output/cleaned/training_data_gpt.xlsx')  
+    filename = input("Enter the name for the cleaned training data Excel file (without extension): ") + ".xlsx"
+
+    cleaned_file = os.path.join(os.path.dirname(__file__), f'../../output/cleaned/{filename}') 
     df_filtered.to_excel(cleaned_file, index=False)
 
 
