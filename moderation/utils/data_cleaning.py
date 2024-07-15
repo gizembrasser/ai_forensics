@@ -2,28 +2,6 @@ import os
 import pandas as pd
 import re
 
-training_file = os.path.join(os.path.dirname(__file__), '../../input/training/Microsof-Copilot-Answers_in-Swiss-Bavarian-Hess-Elections.xlsx')
-output_file = os.path.join(os.path.dirname(__file__), '../../output/US_responses.xlsx')
-
-
-def clean_gpt_dataset(file, model_filter='gpt', column_to_clean='answer'):
-    df = pd.read_excel(file)
-
-    # Filter the DataFrame to keep only rows where 'model' contains the specified string
-    df_filtered = df[df['model'].str.contains(model_filter, case=False, na=False)]
-
-    # Clean the specified column
-    df_filtered[column_to_clean] = df_filtered[column_to_clean].str.replace('*', '', regex=False)\
-                                                                .str.replace('#', '', regex=False)\
-                                                                .str.replace('\n', ' ', regex=True)\
-                                                                .str.replace('  +', ' ', regex=True)
-
-    # Save the cleaned DataFrame to the output file
-    filename = input("Enter the name for the cleaned GPT Excel file (without extension): ") + ".xlsx"
-
-    cleaned_file = os.path.join(os.path.dirname(__file__), f'../../output/cleaned/{filename}')
-    df_filtered.to_excel(cleaned_file, index=False)
-
 
 def remove_emojis(text):
     emoji_pattern = re.compile(
@@ -51,10 +29,10 @@ def remove_emojis(text):
     return emoji_pattern.sub(r'', text)
 
 
-def clean_training_dataset(file, language='en', column_to_clean='answer'):
+def clean_ai_dataset(file, filter_column, filter, column_to_clean='answer'):
     df = pd.read_excel(file)
 
-    df_filtered = df[df['language'] == language]
+    df_filtered = df[df[filter_column].str.contains(filter, case=False, na=False)]
     df_filtered = df_filtered[df_filtered['macrocategory'] != 'unlabelled']
 
     # Clean the specified column
@@ -63,14 +41,20 @@ def clean_training_dataset(file, language='en', column_to_clean='answer'):
                                                                 .apply(remove_emojis)\
                                                                 .str.replace(r'\s*\[.*?\]', '', regex=True)\
                                                                 .str.replace('\n', ' ', regex=True)\
+                                                                .str.replace('*', '', regex=False)\
+                                                                .str.replace('#', '', regex=False)\
+                                                                .str.replace('  +', ' ', regex=True)\
+                                                                .str.replace('"', "'", regex=False)\
                                                                 .str.strip()                                                            
 
     # Save the cleaned DataFrame to the output file
-    filename = input("Enter the name for the cleaned training data Excel file (without extension): ") + ".xlsx"
+    filename = input("Enter the name for the cleaned Excel file (without extension): ") + ".xlsx"
 
     cleaned_file = os.path.join(os.path.dirname(__file__), f'../../output/cleaned/{filename}') 
     df_filtered.to_excel(cleaned_file, index=False)
 
 
-# clean_gpt_dataset(output_file)
-# clean_training_dataset(training_file)
+training_file = os.path.join(os.path.dirname(__file__), '../../input/training/Microsof-Copilot-Answers_in-Swiss-Bavarian-Hess-Elections.xlsx')
+output_file = os.path.join(os.path.dirname(__file__), '../../output/US_responses.xlsx')
+
+# clean_ai_dataset(training_file, "language", "en")
