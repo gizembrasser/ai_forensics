@@ -1,6 +1,6 @@
 import concurrent.futures
 
-def test_llms_parallel(llms, prompts):
+def prompt_llms_parallel(llms, prompts):
     responses = []
 
     def collect_responses(name, llm_func):
