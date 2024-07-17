@@ -6,6 +6,8 @@
 # Source: https://github.com/paul-rottger/exaggerated-safety/tree/main
 # License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
 # For more details on XSTest, please refer to the arxiv preprint: https://arxiv.org/abs/2308.01263
+#
+# Modifications have been made to the original work.
 
 import os
 import pandas as pd
