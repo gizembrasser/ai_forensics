@@ -81,3 +81,18 @@ python main.py str_classify input/<excel_file.xlsx> <column_name> <output_file.x
 ```
 python main.py str_classify input/EU_prompts.xlsx Prompts EU_responses.xlsx --num_rows 10
 ```
+
+## In progress
+
+### 1. Keyword Search
+- Allow users to search for specific words or phrases in the responses.
+- Advanced options:
+  - **Search by model**: Search responses from a specific model only.
+  - **Regex search**: Enable regular expression-based searches for more complex queries.
+
+### 2. Sentiment Analysis
+- Add functionality to analyze the sentiment (positive, negative, neutral) of each response.
+
+### 3. Topic Modeling
+- Implement topic modeling (e.g., using Latent Dirichlet Allocation) to group responses by common themes or topics.
+- Include a summary of top keywords for each topic.
