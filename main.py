@@ -4,7 +4,8 @@ import time
 from prompting.prompt_gpt import get_gpt_responses
 from prompting.prompt_gemini import get_gemini_responses
 from prompting.prompt_llms import prompt_llms_parallel
-from moderation.classify_completions_strmatch import strmatch_label
+from analysis.classify_completions_strmatch import strmatch_label
+from analysis.keywords import contains_keywords
 from core.commands import create_parser
 
 
@@ -45,6 +46,14 @@ def main(INPUT_FILE, COLUMN_NAME, OUTPUT_FILE, NUM_ROWS=None):
     
     if args.command == "str_classify":
         df["strmatch_label"] = df[COLUMN_NAME].apply(lambda x: strmatch_label(x))
+
+        output_path = os.path.join('output', 'classified', OUTPUT_FILE)
+        df.to_excel(output_path, index=False)
+
+        print(f"Responses have been written to {output_path}")
+     
+    if args.command == "keywords":
+        df["contains_keywords"] = df[COLUMN_NAME].apply(lambda x: contains_keywords(x))
 
         output_path = os.path.join('output', 'classified', OUTPUT_FILE)
         df.to_excel(output_path, index=False)

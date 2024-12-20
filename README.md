@@ -17,7 +17,7 @@ Before running the program, you need to ensure that your environment is set up c
 - Open your terminal in the root folder of the repository.
 - Run the following command to install the required Python libraries:
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -26,7 +26,7 @@ The program uses API keys to interact with OpenAI and Gemini's APIs. Follow thes
 
 - Create a file called `.env` in the root folder of this repository. You can use this command from the terminal:
 
-```bash
+```
 touch .env
 ```
 
@@ -70,29 +70,29 @@ The Ollama LLM script in `prompt_ollama.ipynb` has to be run from Google Colab. 
 
 ## Response classification (beta)
 
+### Compliance
+
 - The command `str_classify` will call a function that classifies a response from an LLM as a 'full refusal' or 'full compliance' in regards to answering the prompt. Use it with the following parameters:
 
 ```
 python main.py str_classify input/<excel_file.xlsx> <column_name> <output_file.xlsx>
 ```
 
-- This command also accepts the optional `--num_rows` argument:
+### Keyword search
+
+- The command `keywords` will check if responses contain one or more items from a list of one or more keywords. Use it with the following parameters:
 
 ```
-python main.py str_classify input/EU_prompts.xlsx Prompts EU_responses.xlsx --num_rows 10
+python main.py keywords input/<excel_file.xlsx> <column_name> <output_file.xlsx>
 ```
+
+- All of these commands can be used with the optional `--num_rows` argument.
 
 ## In progress
 
-### 1. Keyword Search
-- Allow users to search for specific words or phrases in the responses.
-- Advanced options:
-  - **Search by model**: Search responses from a specific model only.
-  - **Regex search**: Enable regular expression-based searches for more complex queries.
-
-### 2. Sentiment Analysis
+### 1. Sentiment Analysis
 - Add functionality to analyze the sentiment (positive, negative, neutral) of each response.
 
-### 3. Topic Modeling
+### 2. Topic Modeling
 - Implement topic modeling (e.g., using Latent Dirichlet Allocation) to group responses by common themes or topics.
 - Include a summary of top keywords for each topic.
