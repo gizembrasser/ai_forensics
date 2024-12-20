@@ -96,3 +96,5 @@ python main.py keywords input/<excel_file.xlsx> <column_name> <output_file.xlsx>
 ### 2. Topic Modeling
 - Implement topic modeling (e.g., using Latent Dirichlet Allocation) to group responses by common themes or topics.
 - Include a summary of top keywords for each topic.
+
+*Let me know if you have more ideas :)*
